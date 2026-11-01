@@ -1,0 +1,22 @@
+<section>
+  <h2>Galería Astronómica</h2>
+
+  @if (imagenes().length > 0) {
+    <div class="galeria">
+     @for (imagen of imagenesFiltradas(); track imagen.date) {
+        @if (imagen.media_type === 'image' && imagen.hdurl) {
+          <article>
+            <h3>{{ imagen.title }}</h3>
+
+            <img [src]="imagen.hdurl"
+                 [alt]="imagen.title">
+
+            <p>Fecha: {{ imagen.date }}</p>
+          </article>
+        }
+      }
+    </div>
+  } @else {
+    <p>Cargando imágenes...</p>
+  }
+</section>

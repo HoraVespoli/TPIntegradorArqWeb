@@ -1,0 +1,30 @@
+<section>
+  <h2>La Tierra vista desde el espacio</h2>
+
+  @if (imagenes().length > 0) {
+    <div class="galeria">
+      @for (imagen of imagenes(); track imagen.image) {
+        <article>
+          <h3>{{ imagen.date }}</h3>
+
+          <img [src]="imagen.url"
+               [alt]="imagen.caption">
+
+          <p>{{ imagen.caption }}</p>
+
+          <p>
+            Latitud:
+            {{ imagen.centroid_coordinates.lat }}
+          </p>
+
+          <p>
+            Longitud:
+            {{ imagen.centroid_coordinates.lon }}
+          </p>
+        </article>
+      }
+    </div>
+  } @else {
+    <p>Cargando imágenes de la Tierra...</p>
+  }
+</section>

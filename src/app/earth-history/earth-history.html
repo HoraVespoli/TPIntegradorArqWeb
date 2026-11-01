@@ -1,0 +1,47 @@
+<section>
+  <h2>Historial de imágenes de la Tierra</h2>
+
+  <div class="buscador">
+    <label for="fecha">Seleccionar fecha:</label>
+
+  <input
+    id="fecha"
+    type="date"
+    min="2015-06-13"
+    [max]="fechaMaxima"
+    [value]="fecha()"
+    (change)="cambiarFecha($event)"
+  >
+
+
+    <button type="button" (click)="buscarImagenes()">
+      Buscar
+    </button>
+  </div>
+
+  @if (cargando()) {
+    <p>Buscando imágenes en NASA...</p>
+  } @else if (error()) {
+    <p>{{ error() }}</p>
+  } @else if (imagenes().length > 0) {
+    <div class="galeria">
+      @for (imagen of imagenes(); track imagen.image) {
+        <article>
+          <h3>{{ imagen.date }}</h3>
+
+          <img [src]="imagen.url" [alt]="imagen.caption">
+
+          <p>{{ imagen.caption }}</p>
+
+          <p>Latitud: {{ imagen.centroid_coordinates.lat }}</p>
+          <p>Longitud: {{ imagen.centroid_coordinates.lon }}</p>
+        </article>
+      }
+    </div>
+  } @else if (busquedaRealizada()) {
+    <p>No hay imágenes disponibles para la fecha seleccionada.</p>
+  } @else {
+    <p>Seleccioná una fecha y presioná Buscar.</p>
+  }
+
+</section>

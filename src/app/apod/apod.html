@@ -1,0 +1,22 @@
+<section>
+  <h2>Imagen astronómica del día</h2>
+
+  @if (apod()[0]; as imagen) {
+    <h3>{{ imagen.title }}</h3>
+
+    <p>Fecha: {{ imagen.date }}</p>
+
+    @if (imagen.media_type === 'image') {
+      <img [src]="imagen.hdurl"
+           [alt]="imagen.title">
+    } @else {
+      <p>El contenido de hoy no es una imagen.</p>
+    }
+
+    <h3>Descripción</h3>
+    <div [innerHTML]="imagen.explanation"></div>
+
+  } @else {
+    <p>Cargando información de NASA...</p>
+  }
+</section>
