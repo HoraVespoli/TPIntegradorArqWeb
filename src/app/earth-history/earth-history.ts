@@ -25,17 +25,38 @@ interface EarthImage extends EarthData {
 export class EarthHistory {
   private http = inject(HttpClient);
 
-  fecha = signal('2026-10-30');
-  fechaMaxima = [
-    new Date().getFullYear(),
-    String(new Date().getMonth() + 1).padStart(2, '0'),
-    String(new Date().getDate()).padStart(2, '0')
+readonly fechaMaxima = this.obtenerFechaDeHoy();
+fecha = signal(this.fechaMaxima);
+
+private obtenerFechaDeHoy(): string {
+  const hoy = new Date();
+
+  return [
+    hoy.getFullYear(),
+    String(hoy.getMonth() + 1).padStart(2, '0'),
+    String(hoy.getDate()).padStart(2, '0')
   ].join('-');
+}
   imagenes = signal<EarthImage[]>([]);
   cargando = signal(false);
   busquedaRealizada = signal(false);
   error = signal('');
 
+  ngOnInit(): void {
+  this.http.get<EarthData[]>('https://epic.gsfc.nasa.gov/api/natural')
+    .subscribe({
+      next: (imagenes) => {
+        const ultimaFecha = imagenes[0]?.date.split(' ')[0];
+
+        if (ultimaFecha && this.fecha() === this.fechaMaxima) {
+          this.fecha.set(ultimaFecha);
+        }
+      },
+      error: () => {
+        // Si falla la consulta, se mantiene la fecha local de hoy.
+      }
+    });
+}
   buscarImagenes() {
     const fechaSeleccionada = this.fecha();
 
